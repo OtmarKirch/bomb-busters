@@ -105,7 +105,7 @@ dependencies = [
 [[package]]
 name = "rust-helpers"
 version = "0.1.0"
-source = "git+https://github.com/OtmarKirch/rust-helpers.git#e4527b19d8b568e7bae9977ed42731e30e5c0cb6"
+source = "git+https://github.com/OtmarKirch/rust-helpers.git#47972c3cd32122c066565f1a051645c943f7181d"
 dependencies = [
  "rand",
 ]

@@ -87,6 +87,10 @@ pub fn get_color(cable_id: u32, all_cables: &HashMap<u32, u32>) -> String {
     }
 }
 
+pub fn get_value(cable_id: u32, all_cables: &HashMap<u32, u32>) -> u32 {
+    *all_cables.get(&cable_id).expect("Cable ID not found")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -136,6 +140,15 @@ mod tests {
                 1 => assert_eq!(color, "yellow"),
                 _ => assert_eq!(color, "unknown"),
             }
+        }
+    }
+
+    #[test]
+    fn test_get_value() {
+        let cables = init_all_cables(12, 2, 3);
+        for (id, value) in &cables {
+            let cable_value = cables.get(id).expect("Cable ID not found");
+            assert_eq!(*cable_value, *value, "Value mismatch for cable ID {}", id);
         }
     }
 }
