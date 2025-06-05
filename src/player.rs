@@ -5,17 +5,17 @@ use rust_helpers::{split_rand_hashset_eq};
 
 use crate::elements::{init_all_cables, init_cables_in_game, get_value, get_color};
 
-fn init_cable_distribution(in_game_cables: &HashSet<u32>, number_players: u32) -> Vec<Vec<u32>> {
-    let mut hands: Vec<Vec<u32>> = split_rand_hashset_eq(in_game_cables.clone(), number_players as usize);
+pub fn init_cable_distribution(in_game_cables: &HashSet<u32>, number_players: u32) -> Vec<Vec<u32>> {
+    let mut distributions: Vec<Vec<u32>> = split_rand_hashset_eq(in_game_cables.clone(), number_players as usize);
 
-    println!("Hands initialized: {:?}", hands);
-    return hands
+    println!("Hands initialized: {:?}", distributions);
+    return distributions
 }
 
-fn sort_cable_distribution(hands: &mut Vec<Vec<u32>>, all_cables: &HashMap<u32, u32>) {
-    for hand in hands.iter_mut() {
-        hand.sort_by_key(|id| all_cables.get(id).cloned().unwrap_or(0));
-        println!("Sorted hand: {:?}", hand);
+pub fn sort_cable_distribution(distributions: &mut Vec<Vec<u32>>, all_cables: &HashMap<u32, u32>) {
+    for distribution in distributions.iter_mut() {
+        distribution.sort_by_key(|id| all_cables.get(id).cloned().unwrap_or(0));
+        println!("Sorted diestribution: {:?}", distribution);
     }
 }
 
@@ -32,7 +32,7 @@ enum CableStatus {
     Revealed,
 }
 
-fn init_hands(sorted_cable_distribution: Vec<Vec<u32>>) -> Vec<Hand> {
+pub fn init_hands(sorted_cable_distribution: Vec<Vec<u32>>) -> Vec<Hand> {
     sorted_cable_distribution.into_iter().map(|cables| {
         Hand {
             cables: cables.clone(),
@@ -54,6 +54,7 @@ pub fn get_teammate_hands(player_number: u32, hands: &Vec<Hand>) -> Vec<Hand> {
     return teammate_hands
 }
 
+/// Shows all hands from the perspective of the current player.
 pub fn show_hands(player_number: u32, hands: &Vec<Hand>, all_cables: &HashMap<u32, u32>) {
     let hand_player: Hand = hands[player_number as usize].clone();
     println!("Player {}'s hand:", player_number);
