@@ -18,7 +18,7 @@ static CABLE_ID_COUNTER: AtomicU32 = AtomicU32::new(1);
 ///
 /// # Returns
 /// A `HashMap` where the keys are cable IDs and the values are the cable values.
-fn init_all_cables(blue_max_val: u32, red_show: u32, yellow_show: u32) -> HashMap<u32, u32> {
+pub fn init_all_cables(blue_max_val: u32, red_show: u32, yellow_show: u32) -> HashMap<u32, u32> {
     let mut cables = HashMap::new();
     for i in 1..=blue_max_val {
         for _ in 1..=4 {
@@ -39,7 +39,7 @@ fn init_all_cables(blue_max_val: u32, red_show: u32, yellow_show: u32) -> HashMa
     return cables
 }
 
-fn init_cables_in_game(
+pub fn init_cables_in_game(
     cables: &HashMap<u32, u32>,
     red_keep: u32,
     yellow_keep: u32,
