@@ -54,6 +54,38 @@ pub fn get_teammate_hands(player_number: u32, hands: &Vec<Hand>) -> Vec<Hand> {
     return teammate_hands
 }
 
+pub fn show_hands(player_number: u32, hands: &Vec<Hand>, all_cables: &HashMap<u32, u32>) {
+    let hand_player: Hand = hands[player_number as usize].clone();
+    println!("Player {}'s hand:", player_number);
+    for n in 0..hand_player.cables.len() {
+        println!("Value: {}, Color: {}, Status: {:?}", 
+            get_value(hand_player.cables[n], all_cables) as f32 / 10.0,
+            get_color(hand_player.cables[n], all_cables),
+            hand_player.status[n]);
+    }
+
+    for (i, hand) in hands.iter().enumerate() {
+        if i as u32 != player_number {
+            println!("Player {}'s hand:", i);
+            for n in 0..hand.cables.len() {
+                let status = match hand.status[n] {
+                    CableStatus::Hidden => "Hidden",
+                    CableStatus::Clue => "Clue",
+                    CableStatus::Revealed => "Revealed",
+                };
+                let color = match status {
+                    "Hidden" => "Hidden".to_string(),
+                    _ => get_color(hand.cables[n], all_cables),
+                };
+                let value = match status {
+                    "Hidden" => "Hidden".to_string(),
+                    _ => (get_value(hand.cables[n], all_cables) as f32 / 10.0).to_string(),
+                };
+                println!("Value: {}, Color: {}, Status: {:?}", value, color, status);
+            }
+        }
+    }
+} 
 
 #[cfg(test)]
 mod tests {
@@ -116,5 +148,22 @@ mod tests {
         let current_player = 1;
 
         get_teammate_hands(current_player, &initialized_hands);
+    }
+
+    #[test]
+    fn test_show_hands() {
+        let all_cables = init_all_cables(10, 3, 2);
+        let in_game_cables = init_cables_in_game(&all_cables, 2, 1);
+        let cable_distributions: Vec<Vec<u32>> = init_cable_distribution(&in_game_cables, 3);
+        assert!(!cable_distributions.is_empty(), "Hands should not be empty");
+
+        let mut sorted_hands = cable_distributions.clone();
+        sort_cable_distribution(&mut sorted_hands, &all_cables);
+        let initialized_hands = init_hands(sorted_hands);
+
+        assert_eq!(initialized_hands.len(), cable_distributions.len(), "Number of cable_distributions should match");
+        let current_player = 0;
+
+        show_hands(current_player, &initialized_hands, &all_cables);
     }
 }
