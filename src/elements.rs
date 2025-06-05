@@ -44,7 +44,36 @@ fn init_cables_in_game(
     red_keep: u32,
     yellow_keep: u32,
 ) -> HashSet<u32> {
-    todo!();
+    let mut in_game_cables: HashSet<u32> = HashSet::new();
+    let blue_cable_ids: Vec<u32> = cables
+        .iter()
+        .filter(|(_, v)| *v % 10 == 0)
+        .map(|(k, _)| *k)
+        .collect();
+    println!("Blue cable IDs: {:?}, length: {}", blue_cable_ids, blue_cable_ids.len());
+    in_game_cables.extend(blue_cable_ids);
+
+    let mut rng = rand::rng();
+    
+    let red_cable_ids: Vec<u32> = cables
+        .iter()
+        .filter(|(_, v)| *v % 10 == 5)
+        .choose_multiple(&mut rng, red_keep as usize).into_iter()
+        .map(|(k, _)| *k)
+        .collect();
+    println!("Red cable IDs: {:?}, length: {}", red_cable_ids, red_cable_ids.len());
+    in_game_cables.extend(red_cable_ids);
+
+    let yellow_cable_ids: Vec<u32> = cables
+        .iter()
+        .filter(|(_, v)| *v % 10 == 1)
+        .choose_multiple(&mut rng, yellow_keep as usize).into_iter()
+        .map(|(k, _)| *k)
+        .collect();
+    println!("Yellow cable IDs: {:?}, length: {}", yellow_cable_ids, yellow_cable_ids.len());
+    in_game_cables.extend(yellow_cable_ids);
+    
+    return in_game_cables
 
 }
 
