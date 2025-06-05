@@ -77,6 +77,16 @@ pub fn init_cables_in_game(
 
 }
 
+pub fn get_color(cable_id: u32, all_cables: &HashMap<u32, u32>) -> String {
+    let cable_value = all_cables.get(&cable_id).expect("Cable ID not found");
+    match cable_value % 10 {
+        0 => "blue".to_string(),
+        5 => "red".to_string(),
+        1 => "yellow".to_string(),
+        _ => "unknown".to_string(),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -113,6 +123,20 @@ mod tests {
         assert_eq!(num_blue_cables, 4 * 12, "Expected {} blue cables in game, found {}", 4 * 12, num_blue_cables);
         assert_eq!(num_red_cables, red_keep as usize, "Expected {} red cables in game, found {}", red_keep, num_red_cables);
         assert_eq!(num_yellow_cables, yellow_keep as usize, "Expected {} yellow cables in game, found {}", yellow_keep, num_yellow_cables);
+    }
+
+    #[test]
+    fn test_get_color() {
+        let cables = init_all_cables(12, 2, 3);
+        for (id, value) in &cables {
+            let color = get_color(*id, &cables);
+            match value % 10 {
+                0 => assert_eq!(color, "blue"),
+                5 => assert_eq!(color, "red"),
+                1 => assert_eq!(color, "yellow"),
+                _ => assert_eq!(color, "unknown"),
+            }
+        }
     }
 }
 
