@@ -77,6 +77,21 @@ pub fn init_cables_in_game(
 
 }
 
+pub fn get_yel_red_info(all_cables: HashMap<u32, u32>) -> (HashSet<u32>, HashSet<u32>) {
+    let mut red_cables: HashSet<u32> = HashSet::new();
+    let mut yellow_cables: HashSet<u32> = HashSet::new();
+    
+    for (cable_id, cable_value) in all_cables.iter() {
+        if cable_value % 10 == 5 {
+            red_cables.insert(*cable_value);
+        } else if cable_value % 10 == 1 {
+            yellow_cables.insert(*cable_value);
+        }
+    }
+    
+    return (red_cables, yellow_cables)
+}
+
 /// When the counter reaches zero, the bomb explodes. The more player, the higher the initial value.
 pub fn init_death_counter(number_players: u32) -> u32 {
     return number_players + 1 
@@ -162,6 +177,20 @@ mod tests {
         let number_players = 3;
         let death_counter = init_death_counter(number_players);
         assert_eq!(death_counter, 4, "Death counter should be {} for {} players", number_players + 1, number_players);
+    }
+
+    #[test]
+    fn test_get_yel_red_info() {
+        let all_cables = HashMap::from([
+            (1, 10), (2, 20), (3, 30), (4, 40), (5, 50), // Blue cables
+            (6, 15), (7, 25), // Red cables
+            (8, 11), (9, 21), (10, 51) // Yellow cables
+        ]);
+        let (red_cables, yellow_cables) = get_yel_red_info(all_cables);
+        assert_eq!(red_cables.len(), 2, "Expected 2 red cables, found {}", red_cables.len());
+        assert_eq!(yellow_cables.len(), 3, "Expected 3 yellow cables, found {}", yellow_cables.len());
+        assert!(red_cables.contains(&15) && red_cables.contains(&25), "Red cables should contain values of 15 and 25");
+        assert!(yellow_cables.contains(&11) && yellow_cables.contains(&21) && yellow_cables.contains(&51), "Yellow cables should contain values of 11, 21, and 51");
     }
 }
 
