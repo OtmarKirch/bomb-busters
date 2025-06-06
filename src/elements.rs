@@ -77,6 +77,11 @@ pub fn init_cables_in_game(
 
 }
 
+/// When the counter reaches zero, the bomb explodes. The more player, the higher the initial value.
+pub fn init_death_counter(number_players: u32) -> u32 {
+    return number_players + 1 
+}
+
 pub fn get_color(cable_id: u32, all_cables: &HashMap<u32, u32>) -> String {
     let cable_value = all_cables.get(&cable_id).expect("Cable ID not found");
     match cable_value % 10 {
@@ -150,6 +155,13 @@ mod tests {
             let cable_value = cables.get(id).expect("Cable ID not found");
             assert_eq!(*cable_value, *value, "Value mismatch for cable ID {}", id);
         }
+    }
+
+    #[test]
+    fn test_init_death_counter() {
+        let number_players = 3;
+        let death_counter = init_death_counter(number_players);
+        assert_eq!(death_counter, 4, "Death counter should be {} for {} players", number_players + 1, number_players);
     }
 }
 

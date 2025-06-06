@@ -3,7 +3,7 @@ use crate::player::*;
 use rand::prelude::*;
 use std::collections::{HashMap, HashSet};
 
-fn hint_random(hands: &mut Vec<Hand>) {
+pub fn hint_random(hands: &mut Vec<Hand>) {
     let mut rng = rand::rng();
     let mut cable_ids: HashSet<u32> = HashSet::new();
     for hand in hands.iter() {
