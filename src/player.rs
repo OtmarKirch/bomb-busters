@@ -25,11 +25,26 @@ pub struct Hand {
     status: Vec<CableStatus> 
 }
 
+impl Hand {
+    pub fn new(cables: Vec<u32>) -> Self {
+        let status = vec![CableStatus::Hidden; cables.len()];
+        Hand { cables, status }
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Copy)]
-enum CableStatus {
+pub enum CableStatus {
     Hidden,
     Clue,
     Revealed,
+}
+
+pub fn get_cables(hand: &Hand) -> Vec<u32> {
+    hand.cables.clone()
+}
+
+pub fn get_status(hand: &Hand) -> Vec<CableStatus> {
+    hand.status.clone()
 }
 
 pub fn init_hands(sorted_cable_distribution: Vec<Vec<u32>>) -> Vec<Hand> {
@@ -88,7 +103,7 @@ pub fn show_hands(player_number: u32, hands: &Vec<Hand>, all_cables: &HashMap<u3
     }
 } 
 
-fn change_cable_status(cable_id: u32, hands: &mut Vec<Hand>, new_status: CableStatus) {
+pub fn change_cable_status(cable_id: u32, hands: &mut Vec<Hand>, new_status: CableStatus) {
     for hand in hands.iter_mut() {
         if let Some(pos) = hand.cables.iter().position(|&id| id == cable_id) {
             hand.status[pos] = new_status;
