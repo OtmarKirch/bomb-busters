@@ -1,10 +1,13 @@
-use crate::{actions::hint_random, terminal::show_cable_info};
+
 
 mod game;
 mod elements;
 mod player;
 mod actions;
 mod terminal;
+
+use crate::terminal::*;
+use crate::actions::*;
 
 fn main() {
     println!("This is Bomb Buster!");
@@ -20,5 +23,5 @@ fn main() {
     let current_player = 0; // Assuming player 0 is the current player
     hint_random(&mut hands);
     show_cable_info(&all_cables, &game);
-    player::show_hands(current_player, &hands, &all_cables);
+    show_hands(current_player, &hands, &all_cables);
 }
