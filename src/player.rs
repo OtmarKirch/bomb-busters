@@ -25,7 +25,7 @@ pub struct Hand {
     status: Vec<CableStatus> 
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Copy)]
 enum CableStatus {
     Hidden,
     Clue,
@@ -87,6 +87,15 @@ pub fn show_hands(player_number: u32, hands: &Vec<Hand>, all_cables: &HashMap<u3
         }
     }
 } 
+
+fn change_cable_status(cable_id: u32, hands: &mut Vec<Hand>, new_status: CableStatus) {
+    for hand in hands.iter_mut() {
+        if let Some(pos) = hand.cables.iter().position(|&id| id == cable_id) {
+            hand.status[pos] = new_status;
+            println!("Changed status of cable {} to {:?}", cable_id, new_status);
+        }
+    }
+}
 
 #[cfg(test)]
 mod tests {
@@ -166,5 +175,25 @@ mod tests {
         let current_player = 0;
 
         show_hands(current_player, &initialized_hands, &all_cables);
+    }
+
+    #[test]
+    fn test_change_cable_status() {
+        let mut hands = vec![
+            Hand {
+                cables: vec![1, 2, 3],
+                status: vec![CableStatus::Clue, CableStatus::Hidden, CableStatus::Revealed],
+            },
+            Hand {
+                cables: vec![4, 5, 6],
+                status: vec![CableStatus::Hidden; 3],
+            },
+        ];
+        change_cable_status(2, &mut hands, CableStatus::Revealed);
+        assert_eq!(hands[0].status[1], CableStatus::Revealed, "Cable status should be changed to Revealed");
+        change_cable_status(4, &mut hands, CableStatus::Clue);
+        assert_eq!(hands[1].status[0], CableStatus::Clue, "Cable status should be changed to Clue");
+        //let mut all_cables: HashMap<u32, u32> = HashMap::new();
+        //all_cables.extend([(1, 10), (2, 25), (3, 30), (4, 40), (5, 51), (6, 60)]);
     }
 }
