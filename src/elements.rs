@@ -77,7 +77,7 @@ pub fn init_cables_in_game(
 
 }
 
-pub fn get_yel_red_info(all_cables: HashMap<u32, u32>) -> (HashSet<u32>, HashSet<u32>) {
+pub fn get_yel_red_info(all_cables: &HashMap<u32, u32>) -> (HashSet<u32>, HashSet<u32>) {
     let mut red_cables: HashSet<u32> = HashSet::new();
     let mut yellow_cables: HashSet<u32> = HashSet::new();
     
@@ -186,7 +186,7 @@ mod tests {
             (6, 15), (7, 25), // Red cables
             (8, 11), (9, 21), (10, 51) // Yellow cables
         ]);
-        let (red_cables, yellow_cables) = get_yel_red_info(all_cables);
+        let (red_cables, yellow_cables) = get_yel_red_info(&all_cables);
         assert_eq!(red_cables.len(), 2, "Expected 2 red cables, found {}", red_cables.len());
         assert_eq!(yellow_cables.len(), 3, "Expected 3 yellow cables, found {}", yellow_cables.len());
         assert!(red_cables.contains(&15) && red_cables.contains(&25), "Red cables should contain values of 15 and 25");

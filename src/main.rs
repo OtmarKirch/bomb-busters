@@ -1,12 +1,15 @@
-use crate::actions::hint_random;
+use crate::{actions::hint_random, terminal::show_cable_info};
 
+mod game;
 mod elements;
 mod player;
 mod actions;
+mod terminal;
 
 fn main() {
     println!("This is Bomb Buster!");
     let (blue_max, red_show, red_keep, yellow_show, yellow_keep, players) = (12, 2, 1, 3, 2, 3);
+    let game = game::GameMeta::new(blue_max, red_show, red_keep, yellow_show, yellow_keep, players);
     let death_counter = elements::init_death_counter(players);
     println!("Death counter: {}", death_counter);
     let all_cables = elements::init_all_cables(blue_max, red_show, yellow_show);
@@ -16,5 +19,6 @@ fn main() {
     let mut hands = player::init_hands(cable_distribution);
     let current_player = 0; // Assuming player 0 is the current player
     hint_random(&mut hands);
+    show_cable_info(&all_cables, &game);
     player::show_hands(current_player, &hands, &all_cables);
 }
