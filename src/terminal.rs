@@ -21,6 +21,8 @@ pub fn show_cable_info(all_cables: &HashMap<u32, u32>, game_meta: &GameMeta) {
 /// Shows all hands from the perspective of the current player.
 pub fn show_hands(player_number: u32, hands: &Vec<Hand>, all_cables: &HashMap<u32, u32>) {
     let hand_player: Hand = hands[player_number as usize].clone();
+    
+    // Display the current player's hand
     println!("Player {}'s hand:", player_number);
     for n in 0..get_cables(&hand_player).len() {
         println!("Value: {}, Color: {}, Status: {:?}", 
@@ -29,6 +31,7 @@ pub fn show_hands(player_number: u32, hands: &Vec<Hand>, all_cables: &HashMap<u3
             get_cables(&hand_player)[n]);
     }
 
+    // Display the hands of other players
     for (i, hand) in hands.iter().enumerate() {
         if i as u32 != player_number {
             println!("Player {}'s hand:", i);

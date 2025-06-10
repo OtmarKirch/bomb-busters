@@ -31,10 +31,7 @@ pub fn init_all_cables(blue_max_val: u32, red_show: u32, yellow_show: u32) -> Ha
     for k in 1..=yellow_show {
         cables.insert(CABLE_ID_COUNTER.fetch_add(1, Ordering::Relaxed), k as u32 * 10 + 1);
     }
-
-    for cable in cables.iter() {
-        println!("Cable ID: {}, Value: {}", cable.0, cable.1);
-    }
+    println!("All cables initialized.");
 
     return cables
 }
@@ -50,7 +47,6 @@ pub fn init_cables_in_game(
         .filter(|(_, v)| *v % 10 == 0)
         .map(|(k, _)| *k)
         .collect();
-    println!("Blue cable IDs: {:?}, length: {}", blue_cable_ids, blue_cable_ids.len());
     in_game_cables.extend(blue_cable_ids);
 
     let mut rng = rand::rng();
@@ -61,7 +57,6 @@ pub fn init_cables_in_game(
         .choose_multiple(&mut rng, red_keep as usize).into_iter()
         .map(|(k, _)| *k)
         .collect();
-    println!("Red cable IDs: {:?}, length: {}", red_cable_ids, red_cable_ids.len());
     in_game_cables.extend(red_cable_ids);
 
     let yellow_cable_ids: Vec<u32> = cables
@@ -70,7 +65,6 @@ pub fn init_cables_in_game(
         .choose_multiple(&mut rng, yellow_keep as usize).into_iter()
         .map(|(k, _)| *k)
         .collect();
-    println!("Yellow cable IDs: {:?}, length: {}", yellow_cable_ids, yellow_cable_ids.len());
     in_game_cables.extend(yellow_cable_ids);
     
     return in_game_cables

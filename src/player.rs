@@ -8,15 +8,15 @@ use crate::elements::{init_all_cables, init_cables_in_game, get_value, get_color
 pub fn init_cable_distribution(in_game_cables: &HashSet<u32>, number_players: u32) -> Vec<Vec<u32>> {
     let mut distributions: Vec<Vec<u32>> = split_rand_hashset_eq(in_game_cables.clone(), number_players as usize);
 
-    println!("Hands initialized: {:?}", distributions);
+    println!("Hands initialized.");
     return distributions
 }
 
 pub fn sort_cable_distribution(distributions: &mut Vec<Vec<u32>>, all_cables: &HashMap<u32, u32>) {
     for distribution in distributions.iter_mut() {
         distribution.sort_by_key(|id| all_cables.get(id).cloned().unwrap_or(0));
-        println!("Sorted diestribution: {:?}", distribution);
     }
+        println!("Distribution sorted.");
 }
 
 #[derive(Clone, Debug)]
@@ -73,7 +73,6 @@ pub fn change_cable_status(cable_id: u32, hands: &mut Vec<Hand>, new_status: Cab
     for hand in hands.iter_mut() {
         if let Some(pos) = hand.cables.iter().position(|&id| id == cable_id) {
             hand.status[pos] = new_status;
-            println!("Changed status of cable {} to {:?}", cable_id, new_status);
         }
     }
 }
