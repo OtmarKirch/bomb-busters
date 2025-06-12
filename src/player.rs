@@ -22,13 +22,14 @@ pub fn sort_cable_distribution(distributions: &mut Vec<Vec<u32>>, all_cables: &H
 #[derive(Clone, Debug)]
 pub struct Hand {
     cables: Vec<u32>, 
-    status: Vec<CableStatus> 
+    status: Vec<CableStatus>,
+    announced: Vec<u32>
 }
 
 impl Hand {
     pub fn new(cables: Vec<u32>) -> Self {
         let status = vec![CableStatus::Hidden; cables.len()];
-        Hand { cables, status }
+        Hand { cables, status, announced: vec![] }
     }
 }
 
@@ -52,6 +53,7 @@ pub fn init_hands(sorted_cable_distribution: Vec<Vec<u32>>) -> Vec<Hand> {
         Hand {
             cables: cables.clone(),
             status: vec![CableStatus::Hidden; cables.len()],
+            announced: vec![],
         }
     }).collect()
 }
@@ -146,10 +148,12 @@ mod tests {
             Hand {
                 cables: vec![1, 2, 3],
                 status: vec![CableStatus::Clue, CableStatus::Hidden, CableStatus::Revealed],
+                announced: vec![],
             },
             Hand {
                 cables: vec![4, 5, 6],
                 status: vec![CableStatus::Hidden; 3],
+                announced: vec![],
             },
         ];
         change_cable_status(2, &mut hands, CableStatus::Revealed);
