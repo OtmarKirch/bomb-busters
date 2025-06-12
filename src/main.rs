@@ -24,4 +24,5 @@ fn main() {
     hint_random(&mut hands);
     show_cable_info(&all_cables, &game);
     show_hands(current_player, &hands, &all_cables);
+    create_new_game();
 }
