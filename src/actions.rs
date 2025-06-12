@@ -54,7 +54,7 @@ mod tests {
     }
 
     #[test]
-    fn test_duo_cut() {
+    fn test_successfull_duo_cut() {
         // Successfull duo cut
         let all_cables = HashMap::from([
             (1, 10), (2, 20), (3, 30), (4, 40), (5, 50), (6, 40), (7, 20), // blue
@@ -80,6 +80,31 @@ mod tests {
         
         // Unsuccessful duo cut
 
+        
+    }
+
+    #[test]
+    fn test_unsuccessful_duo_cut() {
+        let all_cables = HashMap::from([
+            (1, 10), (2, 20), (3, 30), (4, 40), (5, 50), (6, 40), (7, 20), // blue
+            (8, 15), (9, 25), // red
+            (11, 11), (12, 21), (13, 31), // yellow
+        ]);
+        let mut hands = vec![
+            Hand::new(vec![1, 2, 3, 5, 6, 8, 11]),
+            Hand::new(vec![4, 7, 9, 10, 12, 13]),
+        ];
+
+        let hand0_status = get_status(&hands[0]);
+        let hand1_status = get_status(&hands[1]);
+        assert!(matches!(hand0_status[1], CableStatus::Hidden | CableStatus::Clue), "Expected cable at position 2 in player 0's hand to be hidden or a clue before duo cut");
+        assert!(matches!(hand1_status[0], CableStatus::Hidden | CableStatus::Clue), "Expected cable at position 2 in player 1's hand to be hidden or a clue before duo cut");
+    
+        duo_cut(0, 1, 1, 0, &mut hands, &all_cables);
+        assert_eq!(get_status(&hands[0])[1], CableStatus::Hidden, "Expected cable at position 2 in player 0's hand to be still hidden after unsuccessful duo cut");
+        assert_eq!(get_status(&hands[1])[0], CableStatus::Clue, "Expected cable at position 2 in player 1's hand to be a clue after unsuccessful duo cut");
+        assert!(get_announced_cables(&hands[0]).contains(&get_cables(&hands[0])[1]), "Expected announced cables in player 0's hand to contain the named cable after unsuccessful duo cut");
+        assert!(get_announced_cables(&hands[1]).is_empty(), "Expected no announced cables in player 1's hand after unsuccessful duo cut");
         
     }
 }

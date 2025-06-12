@@ -79,6 +79,16 @@ pub fn change_cable_status(cable_id: u32, hands: &mut Vec<Hand>, new_status: Cab
     }
 }
 
+pub fn get_announced_cables(hand: &Hand) -> Vec<u32> {
+    hand.announced.clone()
+}
+
+pub fn add_announced_cable(hand: &mut Hand, cable_id: u32) {
+    if !hand.announced.contains(&cable_id) {
+        hand.announced.push(cable_id);
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
