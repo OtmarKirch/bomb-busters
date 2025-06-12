@@ -30,6 +30,8 @@ pub fn duo_cut(player: u32, teammate: u32, position_self: u32, position_teammate
     } else {
         change_cable_status(cable_teammate_id, hands, CableStatus::Clue);
         println!("Duo cut failed! Teammate's cable is now a clue.");
+        add_announced_cable(&mut hands[player as usize], cable_self_id);
+        println!("Player announced cable value due to failed duo cut: {}", get_value(cable_self_id, &all_cables));
     }
     
 }
@@ -55,7 +57,6 @@ mod tests {
 
     #[test]
     fn test_successfull_duo_cut() {
-        // Successfull duo cut
         let all_cables = HashMap::from([
             (1, 10), (2, 20), (3, 30), (4, 40), (5, 50), (6, 40), (7, 20), // blue
             (8, 15), (9, 25), // red
@@ -76,11 +77,7 @@ mod tests {
         
         duo_cut(0, 1, 1, 1, &mut hands, &all_cables);
         assert_eq!(get_status(&hands[0])[1], CableStatus::Revealed, "Expected cable at position 2 in player 0's hand to be revealed after successfull duo cut");
-        assert_eq!(get_status(&hands[1])[1], CableStatus::Revealed, "Expected cable at position 2 in player 1's hand to be revealed after successfull duo cut");
-        
-        // Unsuccessful duo cut
-
-        
+        assert_eq!(get_status(&hands[1])[1], CableStatus::Revealed, "Expected cable at position 2 in player 1's hand to be revealed after successfull duo cut");   
     }
 
     #[test]
